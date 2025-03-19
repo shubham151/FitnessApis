@@ -17,7 +17,7 @@ To set up the project, follow these steps:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/shubham151/FitnessApis.git
 cd FitnessAPI
 
 # Install dependencies
