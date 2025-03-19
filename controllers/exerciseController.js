@@ -1,9 +1,22 @@
 import { getDB } from '../config/db.js';
 
+// Create new Exercise
 let createExercise =  async (req, res) => {
   try {
     const { name, description, difficulty, isPublic } = req.body;
     const createdBy = req.user.id;
+
+    if (!name || name.trim() === "") {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    if (!description || description.trim() === "") {
+      return res.status(400).json({ message: "Description is required" });
+    }
+
+    if (difficulty === undefined || difficulty === null) {
+      return res.status(400).json({ message: "Difficulty is required" });
+    }
     const db = getDB();
     const [exercise] = await db('exercises')
       .insert({
@@ -21,13 +34,49 @@ let createExercise =  async (req, res) => {
   }
 }
 
+// Reactivate existing exercise
+let reactivateExercise = async (req, res) => {
+  try {
+    const {exerciseId } = req.body;
+    const userId = req.user.id;
+    const db = getDB();
+
+    const exercise = await db('exercises')
+      .where({
+        rec_id: exerciseId,
+        created_by: userId,
+        rec_status: 'D'
+      })
+      .first();
+
+    if (!exercise) {
+      return res.status(404).json({ message: 'Exercise not found or already active' });
+    }
+
+    const [reactivatedExercise] = await db('exercises')
+      .where({ rec_id: exerciseId })
+      .update({
+        rec_status: 'A',
+        updated_at: new Date()
+      })
+      .returning(['rec_id', 'name', 'description', 'difficulty', 'is_public', 'created_by']);
+
+    res.status(200).json({ message: 'Exercise reactivated', exercise: reactivatedExercise });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get all public exercises
 let getAllPublicExercises = async (req, res) => {
   try {
     const db = getDB();
     const exercises = await db('exercises')
-      .where({ is_public: true, rec_status: 'A' })
+      .where({ is_public: true })
+      .andWhere('exercises.rec_status', 'A')
       .leftJoin('favorites', 'exercises.rec_id', 'favorites.exercise_id')
-      .leftJoin('saves', 'exercises.rec_id', 'saves.exercise_id')
+      .leftJoin('saved_exercise', 'exercises.rec_id', 'saved_exercise.exercise_id')
       .groupBy('exercises.rec_id')
       .select(
         'exercises.rec_id',
@@ -36,7 +85,7 @@ let getAllPublicExercises = async (req, res) => {
         'exercises.difficulty',
         'exercises.is_public',
         db.raw('COUNT(DISTINCT favorites.rec_id) as favorite_count'),
-        db.raw('COUNT(DISTINCT saves.rec_id) as save_count')
+        db.raw('COUNT(DISTINCT saved_exercise.rec_id) as save_count')
       );
     res.json(exercises);
   } catch (err) {
@@ -45,10 +94,13 @@ let getAllPublicExercises = async (req, res) => {
   }
 }
 
+// Get specific exercise
 let getExerciseById = async (req, res) => {
   try {
     const exerciseId = req.params.exerciseId;
     const userId = req.user.id;
+
+    console.log(exerciseId, userId);
     const db = getDB();
     const exercise = await db('exercises')
       .where({ rec_id: exerciseId, rec_status: 'A' })
@@ -56,19 +108,19 @@ let getExerciseById = async (req, res) => {
     if (!exercise) {
       return res.status(404).json({ message: 'Exercise not found' });
     }
-    // Allow access if exercise is public or if the user is the creator.
+
     if (!exercise.is_public && exercise.created_by !== userId) {
       return res.status(403).json({ message: 'Not allowed to view this exercise' });
     }
-    // Retrieve favorite and save counts.
+
     const [counts] = await db('exercises')
       .leftJoin('favorites', 'exercises.rec_id', 'favorites.exercise_id')
-      .leftJoin('saves', 'exercises.rec_id', 'saves.exercise_id')
+      .leftJoin('saved_exercise', 'exercises.rec_id', 'saved_exercise.exercise_id')
       .where('exercises.rec_id', exerciseId)
       .groupBy('exercises.rec_id')
       .select(
         db.raw('COUNT(DISTINCT favorites.rec_id) as favorite_count'),
-        db.raw('COUNT(DISTINCT saves.rec_id) as save_count')
+        db.raw('COUNT(DISTINCT saved_exercise.rec_id) as save_count')
       );
     res.json({ ...exercise, ...counts });
   } catch (err) {
@@ -77,13 +129,15 @@ let getExerciseById = async (req, res) => {
   }
 }
 
+// Update existing exercise
 let updateExercise = async (req, res) => {
   try {
+    console.log('test')
     const exerciseId = req.params.exerciseId;
     const userId = req.user.id;
     const { name, description, difficulty, isPublic } = req.body;
     const db = getDB();
-    // Check for exercise existence and ownership.
+
     const exercise = await db('exercises')
       .where({ rec_id: exerciseId, rec_status: 'A' })
       .first();
@@ -110,12 +164,13 @@ let updateExercise = async (req, res) => {
   }
 }
 
+// Delete existing exercise
 let deleteExercise = async (req, res) => {
   try {
     const exerciseId = req.params.exerciseId;
     const userId = req.user.id;
     const db = getDB();
-    // Check for existence and ownership.
+
     const exercise = await db('exercises')
       .where({ rec_id: exerciseId, rec_status: 'A' })
       .first();
@@ -125,10 +180,9 @@ let deleteExercise = async (req, res) => {
     if (exercise.created_by !== userId) {
       return res.status(403).json({ message: 'Not allowed to delete this exercise' });
     }
-    // Mark the record as inactive instead of a hard delete.
     await db('exercises')
       .where({ rec_id: exerciseId })
-      .update({ rec_status: 'I', updated_at: new Date() });
+      .update({ rec_status: 'D', updated_at: new Date() });
     res.json({ message: 'Exercise deleted' });
   } catch (err) {
     console.error(err);
@@ -136,9 +190,46 @@ let deleteExercise = async (req, res) => {
   }
 }
 
-// --------------------
-// BONUS: Additional Endpoints
-// --------------------
+// Search/Filter Exercise
+let searchExercises = async (req, res) => {
+  try {
+    const { name, description, difficulty } = req.query;
+    const userId = req.user.id;
+    const db = getDB();
+
+    let query = db('exercises')
+      .where('rec_status', 'A')
+      .andWhere(function () {
+        this.where('is_public', true).orWhere('created_by', userId);
+      });
+    if (name) {
+      query = query.andWhere('name', 'ilike', `%${name}%`);
+    }
+
+    if (description) {
+      query = query.andWhere('description', 'ilike', `%${description}%`);
+    }
+
+
+    if (difficulty) {
+      query = query.andWhere('difficulty', difficulty);
+    }
+
+    const exercises = await query.select(
+      'rec_id',
+      'name',
+      'description',
+      'difficulty',
+      'is_public',
+      'created_by'
+    );
+    res.json(exercises);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 // Favorite an Exercise
 let favoriteExercise = async (req, res) => {
@@ -186,7 +277,7 @@ let saveExercise = async (req, res) => {
     const exerciseId = req.params.exerciseId;
     const userId = req.user.id;
     const db = getDB();
-    await db('saves')
+    await db('saved_exercise')
       .insert({
         user_id: userId,
         exercise_id: exerciseId
@@ -206,7 +297,7 @@ let unsaveExercise = async (req, res) => {
     const exerciseId = req.params.exerciseId;
     const userId = req.user.id;
     const db = getDB();
-    await db('saves')
+    await db('saved_exercise')
       .where({
         user_id: userId,
         exercise_id: exerciseId,
@@ -251,9 +342,9 @@ let getFavoritesSavesList = async (req, res) => {
       .join('exercises', 'favorites.exercise_id', 'exercises.rec_id')
       .where('favorites.user_id', userId)
       .select('exercises.rec_id', 'exercises.name', 'exercises.description', db.raw("'favorite' as type"));
-    const saves = await db('saves')
-      .join('exercises', 'saves.exercise_id', 'exercises.rec_id')
-      .where('saves.user_id', userId)
+    const saves = await db('saved_exercise')
+      .join('exercises', 'saved_exercise.exercise_id', 'exercises.rec_id')
+      .where('saved_exercise.user_id', userId)
       .select('exercises.rec_id', 'exercises.name', 'exercises.description', db.raw("'save' as type"));
     res.json([...favorites, ...saves]);
   } catch (err) {
@@ -283,9 +374,9 @@ let getUsersWhoSaved = async (req, res) => {
   try {
     const exerciseId = req.params.exerciseId;
     const db = getDB();
-    const users = await db('saves')
-      .join('users', 'saves.user_id', 'users.rec_id')
-      .where('saves.exercise_id', exerciseId)
+    const users = await db('saved_exercise')
+      .join('users', 'saved_exercise.user_id', 'users.rec_id')
+      .where('saved_exercise.exercise_id', exerciseId)
       .select('users.rec_id', 'users.username');
     res.json(users);
   } catch (err) {
@@ -307,5 +398,7 @@ export {
   rateExercise,
   getFavoritesSavesList,
   getUsersWhoFavorited,
-  getUsersWhoSaved
+  getUsersWhoSaved,
+  reactivateExercise,
+  searchExercises
 };

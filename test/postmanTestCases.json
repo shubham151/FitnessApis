@@ -1,0 +1,717 @@
+{
+  "info": {
+    "_postman_id": "e59f3b9b-d2f8-4e89-8b9a-123456789abc",
+    "name": "Fitness APIs Comprehensive Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "A comprehensive Postman collection covering all endpoints and test cases for the Fitness API. This collection tests auth (with 6 users), create exercise (5 test cases), search endpoints (5 combinations), and other endpoints."
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User 1",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser1\",\n  \"password\": \"testpassword1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User 2",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser2\",\n  \"password\": \"testpassword2\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User 3",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser3\",\n  \"password\": \"testpassword3\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User 4",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser4\",\n  \"password\": \"testpassword4\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User 5",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser5\",\n  \"password\": \"testpassword5\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User 6",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser6\",\n  \"password\": \"testpassword6\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('access_token', response.accessToken);",
+                  "pm.environment.set('refresh_token', response.refreshToken);",
+                  "console.log('Access Token:', response.accessToken);",
+                  "console.log('Refresh Token:', response.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser1\",\n  \"password\": \"testpassword1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('access_token', response.accessToken);",
+                  "pm.environment.set('refresh_token', response.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser2\",\n  \"password\": \"testpassword2\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('access_token', response.accessToken);",
+                  "pm.environment.set('refresh_token', response.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser3\",\n  \"password\": \"testpassword3\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User4",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('access_token', response.accessToken);",
+                  "pm.environment.set('refresh_token', response.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser4\",\n  \"password\": \"testpassword4\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{refresh_token}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercises",
+      "item": [
+        {
+          "name": "Create Exercise - Pushups",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('exerciseId', response.rec_id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pushups\",\n  \"description\": \"Do 20 pushups\",\n  \"difficulty\": 1,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise - Pullups",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('exerciseId', response.rec_id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pullups\",\n  \"description\": \"Do 20 pullups\",\n  \"difficulty\": 3,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise - Missing Name",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"No name provided\",\n  \"difficulty\": 1,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise - Missing Difficulty",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Squats\",\n  \"description\": \"Do 30 squats\",\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise - Null Description",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lunges\",\n  \"description\": \"\",\n  \"difficulty\": 2,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Exercise - Without Auth",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Plank\",\n  \"description\": \"Hold for 60 seconds\",\n  \"difficulty\": 3,\n  \"isPublic\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Exercises - By Name Only",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/search?name=Push",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "search"],
+              "query": [{ "key": "name", "value": "Push" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Exercises - By Description Only",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/search?description=pushups",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "search"],
+              "query": [{ "key": "description", "value": "pushups" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Exercises - By Difficulty Only",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/search?difficulty=1",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "search"],
+              "query": [{ "key": "difficulty", "value": "1" }]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Exercises - By Name and Difficulty",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/search?name=Push&difficulty=1",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "search"],
+              "query": [
+                { "key": "name", "value": "Push" },
+                { "key": "difficulty", "value": "1" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Exercises - By Name, Description and Difficulty",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/search?name=Push&description=pushups&difficulty=1",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "search"],
+              "query": [
+                { "key": "name", "value": "Push" },
+                { "key": "description", "value": "pushups" },
+                { "key": "difficulty", "value": "1" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reactivate Exercise",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let response = pm.response.json();",
+                  "pm.environment.set('exerciseId', response.exercise.rec_id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exerciseId\": \"{{exerciseId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/reactivate",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "reactivate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Public Exercises",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises",
+              "host": ["{{base_url}}"],
+              "path": ["exercises"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Exercise By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Exercise",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Exercise Name\",\n  \"description\": \"Updated Description\",\n  \"difficulty\": 2,\n  \"isPublic\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Exercise",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Favorite Exercise",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/favorite",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "favorite"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unfavorite Exercise",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/favorite",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "favorite"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Save Exercise",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/save",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "save"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unsave Exercise",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/save",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "save"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rate Exercise",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/rate",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "rate"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Favorites & Saves List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/favorites-saves",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "favorites-saves"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users Who Favorited",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/users-who-favorited",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "users-who-favorited"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users Who Saved",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{access_token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/exercises/{{exerciseId}}/users-who-saved",
+              "host": ["{{base_url}}"],
+              "path": ["exercises", "{{exerciseId}}", "users-who-saved"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:4000" },
+    { "key": "access_token", "value": "" },
+    { "key": "refresh_token", "value": "" },
+    { "key": "exerciseId", "value": "" }
+  ]
+}

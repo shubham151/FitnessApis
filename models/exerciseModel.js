@@ -23,16 +23,13 @@ let createExercise = async ({ name, description, difficulty, isPublic, createdBy
 
 let getExerciseById = async (rec_id) => {
   const db = getDB();
-  // Retrieve only active records
   const exercise = await db('exercises')
     .where({ rec_id, rec_status: 'A' })
     .first();
   return exercise;
 }
 
-// Optionally, add more functions (update, delete, etc.)
-
-module.exports = {
+export {
   createExercise,
   getExerciseById
 };

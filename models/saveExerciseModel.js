@@ -13,7 +13,7 @@ let addSave = async (userId, exerciseId) => {
 
 let removeSave = async (userId, exerciseId) => {
   const db = getDB();
-  await db('saves')
+  await db('saved_exercise')
     .where({
       user_id: userId,
       exercise_id: exerciseId,
